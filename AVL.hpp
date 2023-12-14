@@ -24,8 +24,40 @@ private:
       return ptr->height;
    }
 
+   Node* rotate_left(Node** ptr) {
+      Node* tmp = *ptr;
+      Node* banana = (*ptr)->right;
+      Node* potato = banana->left;
+
+      banana->left = tmp; 
+      tmp->right = potato;
+
+      update_height(&tmp);
+      update_height(&banana);
+
+      return banana;
+   }
+
+   Node* rotate_right(Node** ptr) {
+      Node* tmp = *ptr;
+      Node* banana = (*ptr)->left;
+      Node* potato = banana->right;
+
+      banana->right = tmp; 
+      tmp->left = potato;
+
+      update_height(&tmp);
+      update_height(&banana);
+
+      return banana;
+   }
+
    int balance(Node* ptr) {
       return subtree_height(ptr->right) - subtree_height(ptr->left);
+   }
+
+   void update_height(Node** ptr) {
+      (*ptr)->height = 1 + std::max(subtree_height((*ptr)->left), subtree_height((*ptr)->right));
    }
 
    void printRecursive(Node* ptr, int indent = 0) {
@@ -73,7 +105,7 @@ public:
       while(!path.empty()) {
          Node** tmp = path.top();
          path.pop();
-         (*tmp)->height = 1 + std::max(subtree_height((*tmp)->left), subtree_height((*tmp)->right));
+         update_height(tmp);
          int diff = balance((*tmp));
          // std:: cout << (*tmp)->value << " ";
 
@@ -94,6 +126,14 @@ public:
       }
 
       return false;
+   }
+
+   void rotate_right() {
+      root = rotate_right(&root);
+   }
+
+   void rotate_left() {
+      root = rotate_left(&root);
    }
 
    void print() {
