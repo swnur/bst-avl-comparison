@@ -17,17 +17,6 @@ class AVLTree {
 private:
    Node* root;
 
-   void printRecursive(Node* node, int indent = 0) const {
-      if (node != nullptr) {
-         printRecursive(node->right, indent + 5);
-         for (int i = 0; i < indent; ++i) {
-            std::cout << " ";
-         }
-         std::cout << "|-->" << node->value << "(" << node->height << ")" << std::endl;
-         printRecursive(node->left, indent + 4);
-      }
-   }
-
    int subtree_height(Node* ptr) {
       if (ptr == nullptr) {
          return 0;
@@ -37,6 +26,18 @@ private:
 
    int balance(Node* ptr) {
       return subtree_height(ptr->right) - subtree_height(ptr->left);
+   }
+
+   void printRecursive(Node* ptr, int indent = 0) {
+      if (ptr != nullptr) {
+         printRecursive(ptr->right, indent + 5);
+         for (int i = 0; i < indent; ++i) {
+            std::cout << " ";
+         }
+         int diff = balance(ptr);
+         std::cout << "|-->" << ptr->value << "(" << ptr->height << ")" << std::endl;
+         printRecursive(ptr->left, indent + 4);
+      }
    }
 
    void delete_tree(Node* root) {
@@ -54,40 +55,30 @@ public:
    }
 
    void insert(int val) {
-      std::stack<Node*> path;
-      Node* parent = nullptr;
-      Node* curr = root;
-      while(curr != nullptr) {
-         path.push(curr);
-         if (val < curr->value) {
-            parent = curr;
-            curr = curr->left;
+      std::stack<Node**> path;
+      Node** ptr = &root;
+
+      while((*ptr) != nullptr) {
+         path.push(ptr);
+         if ((*ptr)->value > val) {
+            ptr = &((*ptr)->left);
          } else {
-            parent = curr;
-            curr = curr->right;
+            ptr = &((*ptr)->right);
          }
       }
 
-      Node* inserted = new Node(val);
-
-      if (parent == nullptr) {
-         root = inserted;
-         path.push(root);
-      } else {
-         if (val <= parent->value) {
-            parent->left = inserted;
-            path.push(parent->left);
-         } else {
-            parent->right = inserted;
-            path.push(parent->right);
-         }
-      }
+      *ptr = new Node(val);
+      path.push(ptr);
 
       while(!path.empty()) {
-         Node* tmp = path.top();
+         Node** tmp = path.top();
          path.pop();
-         tmp->height = 1 + std::max(subtree_height(tmp->left), subtree_height(tmp->right));
+         (*tmp)->height = 1 + std::max(subtree_height((*tmp)->left), subtree_height((*tmp)->right));
+         int diff = balance((*tmp));
+         // std:: cout << (*tmp)->value << " ";
+
       }
+      // std::cout << std::endl;
    }
 
    bool find(int val) {
