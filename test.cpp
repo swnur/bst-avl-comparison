@@ -3,7 +3,7 @@
 #include "BST.hpp"
 
 int main() {
-   AVLTree tree;
+   Tree tree;
 
    tree.insert(10);
    tree.insert(5);
@@ -11,7 +11,7 @@ int main() {
    tree.insert(7);
    tree.insert(15);
    tree.insert(11);
-   tree.insert(20);
+   // tree.insert(20);
    
    if (tree.find(3)) {
       std::cout << "3 is in the tree." << std::endl;

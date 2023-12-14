@@ -66,6 +66,20 @@ public:
       }
    }
 
+   void insert_two_ptr(int val) {
+      TreeNode** ptr = &root;
+
+      while((*ptr) != nullptr) {
+         if ((*ptr)->value > val) {
+            ptr = &((*ptr)->left);
+         } else {
+            ptr = &((*ptr)->right);
+         }
+      }
+
+      *ptr = new TreeNode(val);
+   }
+
    bool find(int val) {
       TreeNode* curr = root;
       while(curr != nullptr) {
