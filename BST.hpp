@@ -2,16 +2,17 @@
 #define BST_HPP
 
 #include <iostream>
+#include <string>
 
 struct TreeNode {
    TreeNode* left;
    TreeNode* right;
-   int value;
+   std::string value;
 
-   TreeNode(int val): value(val), left(nullptr), right(nullptr) {}
+   TreeNode(std::string _value): value(_value), left(nullptr), right(nullptr) {}
 };
 
-class Tree {
+class BSTree {
 private:
    TreeNode* root;
 
@@ -27,67 +28,56 @@ private:
    }
 
    void delete_tree(TreeNode* root) {
-      if (root != nullptr) {
-         delete_tree(root->left);
-         delete_tree(root->right);
-         delete root;
+      if (root == nullptr) {
+        return;
+      }
+
+      std::stack<TreeNode*> s;
+      s.push(root);
+
+      while (!s.empty()) {
+         TreeNode* ptr = s.top();
+         s.pop();
+
+         if (ptr->right != nullptr) {
+            s.push(ptr->right);
+         }
+         if (ptr->left != nullptr) {
+            s.push(ptr->left);
+         }
+
+         delete ptr;
       }
    }
 public:
-   Tree(): root(nullptr) {}
+   BSTree(): root(nullptr) {}
 
-   ~Tree() {
+   ~BSTree() {
       delete_tree(root);
    }
 
-   void insert(int val) {
-      TreeNode* parent = nullptr;
-      TreeNode* curr = root;
-      while(curr != nullptr) {
-         if (val < curr->value) {
-            parent = curr;
-            curr = curr->left;
-         } else {
-            parent = curr;
-            curr = curr->right;
-         }
-      }
-
-      TreeNode* inserted = new TreeNode(val);
-
-      if (parent == nullptr) {
-         root = inserted;
-      } else {
-         if (val <= parent->value) {
-            parent->left = inserted;
-         } else {
-            parent->right = inserted;
-         }
-      }
-   }
-
-   void insert_two_ptr(int val) {
+   void insert(std::string _value) {
       TreeNode** ptr = &root;
 
       while((*ptr) != nullptr) {
-         if ((*ptr)->value > val) {
+         if ((*ptr)->value > _value) {
             ptr = &((*ptr)->left);
          } else {
             ptr = &((*ptr)->right);
          }
       }
 
-      *ptr = new TreeNode(val);
+      *ptr = new TreeNode(_value);
    }
 
-   bool find(int val) {
+   bool find(std::string _value) {
       TreeNode* curr = root;
       while(curr != nullptr) {
-         if (val == curr->value) {
+         if (_value == curr->value) {
             return true;
-         } else if (val < curr->value) {
+         } else if (_value < curr->value) {
             curr = curr->left;
-         } else if (val > curr->value) {
+         } else if (_value > curr->value) {
             curr = curr->right;
          }
       }

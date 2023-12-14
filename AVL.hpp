@@ -7,10 +7,10 @@
 struct Node {
    Node* left;
    Node* right;
-   int value;
+   std::string value;
    int height;
 
-   Node(int _value): value(_value), left(nullptr), right(nullptr), height(0) {}
+   Node(std::string _value): value(_value), left(nullptr), right(nullptr), height(0) {}
 };
 
 class AVLTree {
@@ -27,10 +27,10 @@ private:
    Node* rotate_left(Node* ptr) {
       Node* tmp = ptr;
       Node* banana = ptr->right;
-      Node* potato = banana->left;
+      Node* potates = banana->left;
 
       banana->left = tmp; 
-      tmp->right = potato;
+      tmp->right = potates;
 
       update_height(&tmp);
       update_height(&banana);
@@ -41,10 +41,10 @@ private:
    Node* rotate_right(Node* ptr) {
       Node* tmp = ptr;
       Node* banana = ptr->left;
-      Node* potato = banana->right;
+      Node* potates = banana->right;
 
       banana->right = tmp; 
-      tmp->left = potato;
+      tmp->left = potates;
 
       update_height(&tmp);
       update_height(&banana);
@@ -73,10 +73,25 @@ private:
    }
 
    void delete_tree(Node* root) {
-      if (root != nullptr) {
-         delete_tree(root->left);
-         delete_tree(root->right);
-         delete root;
+      if (root == nullptr) {
+        return;
+      }
+
+      std::stack<Node*> s;
+      s.push(root);
+
+      while (!s.empty()) {
+         Node* ptr = s.top();
+         s.pop();
+
+         if (ptr->right != nullptr) {
+            s.push(ptr->right);
+         }
+         if (ptr->left != nullptr) {
+            s.push(ptr->left);
+         }
+
+         delete ptr;
       }
    }
 public:
@@ -86,20 +101,20 @@ public:
       delete_tree(root);
    }
 
-   void insert(int val) {
+   void insert(std::string _value) {
       std::stack<Node**> path;
       Node** ptr = &root;
 
       while((*ptr) != nullptr) {
          path.push(ptr);
-         if ((*ptr)->value > val) {
+         if ((*ptr)->value > _value) {
             ptr = &((*ptr)->left);
          } else {
             ptr = &((*ptr)->right);
          }
       }
 
-      *ptr = new Node(val);
+      *ptr = new Node(_value);
       path.push(ptr);
 
       while(!path.empty()) {
@@ -109,52 +124,52 @@ public:
          int diff = balance((*tmp));
          // std:: cout << (*tmp)->value << " ";
          if (diff == -2) {
-            std::cout << "balance == -2" << std::endl;
+            // std::cout << "balance == -2" << std::endl;
             int sub_diff = balance((*tmp)->left);
             if (sub_diff == -1) {
-               std::cout << "sub_balance == -1" << std::endl;   
+               // std::cout << "sub_balance == -1" << std::endl;   
                *tmp = rotate_right(*tmp);
-               std::cout << "successfully executed" << std::endl;
+               // std::cout << "successfully executed" << std::endl;
             } else if (sub_diff == 1) {
-               std::cout << "sub_balance == +1" << std::endl;
+               // std::cout << "sub_balance == +1" << std::endl;
                (*tmp)->left = rotate_left((*tmp)->left);
                *tmp = rotate_right(*tmp);
-               std::cout << "successfully executed" << std::endl;
+               // std::cout << "successfully executed" << std::endl;
             }
          } else if (diff == 2) {
-            std::cout << "balance == +2" << std::endl;
+            // std::cout << "balance == +2" << std::endl;
             int sub_diff = balance((*tmp)->right);
             if (sub_diff == 1) {
-               std::cout << "sub_balance == +1" << std::endl;   
+               // std::cout << "sub_balance == +1" << std::endl;   
                *tmp = rotate_left(*tmp);
-               std::cout << "successfully executed" << std::endl;
+               // std::cout << "successfully executed" << std::endl;
             } else if (sub_diff == -1) {
-               std::cout << "sub_balance == -1" << std::endl;
+               // std::cout << "sub_balance == -1" << std::endl;
                (*tmp)->right = rotate_right((*tmp)->right);
                *tmp = rotate_left(*tmp);
-               std::cout << "successfully executed" << std::endl;
+               // std::cout << "successfully executed" << std::endl;
             }
          }
-         printRecursive(root);
-         std::cout << std::endl;
+         // printRecursive(root);
+         // std::cout << std::endl;
       }
    }
 
-   bool find(int val) {
+   bool find(std::string _value) {
       Node* curr = root;
       while(curr != nullptr) {
-         if (val == curr->value) {
+         if (_value == curr->value) {
             return true;
-         } else if (val < curr->value) {
+         } else if (_value < curr->value) {
             curr = curr->left;
-         } else if (val > curr->value) {
+         } else if (_value > curr->value) {
             curr = curr->right;
          }
       }
 
       return false;
    }
-   
+
    void print() {
       printRecursive(root);
    }
