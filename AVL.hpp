@@ -24,9 +24,9 @@ private:
       return ptr->height;
    }
 
-   Node* rotate_left(Node** ptr) {
-      Node* tmp = *ptr;
-      Node* banana = (*ptr)->right;
+   Node* rotate_left(Node* ptr) {
+      Node* tmp = ptr;
+      Node* banana = ptr->right;
       Node* potato = banana->left;
 
       banana->left = tmp; 
@@ -38,9 +38,9 @@ private:
       return banana;
    }
 
-   Node* rotate_right(Node** ptr) {
-      Node* tmp = *ptr;
-      Node* banana = (*ptr)->left;
+   Node* rotate_right(Node* ptr) {
+      Node* tmp = ptr;
+      Node* banana = ptr->left;
       Node* potato = banana->right;
 
       banana->right = tmp; 
@@ -67,7 +67,7 @@ private:
             std::cout << " ";
          }
          int diff = balance(ptr);
-         std::cout << "|-->" << ptr->value << "(" << ptr->height << ")" << std::endl;
+         std::cout << "|-->" << ptr->value << "(" << balance(ptr) << ")" << std::endl;
          printRecursive(ptr->left, indent + 4);
       }
    }
@@ -108,9 +108,36 @@ public:
          update_height(tmp);
          int diff = balance((*tmp));
          // std:: cout << (*tmp)->value << " ";
-
+         if (diff == -2) {
+            std::cout << "balance == -2" << std::endl;
+            int sub_diff = balance((*tmp)->left);
+            if (sub_diff == -1) {
+               std::cout << "sub_balance == -1" << std::endl;   
+               *tmp = rotate_right(*tmp);
+               std::cout << "successfully executed" << std::endl;
+            } else if (sub_diff == 1) {
+               std::cout << "sub_balance == +1" << std::endl;
+               (*tmp)->left = rotate_left((*tmp)->left);
+               *tmp = rotate_right(*tmp);
+               std::cout << "successfully executed" << std::endl;
+            }
+         } else if (diff == 2) {
+            std::cout << "balance == +2" << std::endl;
+            int sub_diff = balance((*tmp)->right);
+            if (sub_diff == 1) {
+               std::cout << "sub_balance == -1" << std::endl;   
+               *tmp = rotate_left(*tmp);
+               std::cout << "successfully executed" << std::endl;
+            } else if (sub_diff == -1) {
+               std::cout << "sub_balance == -1" << std::endl;
+               (*tmp)->right = rotate_right((*tmp)->right);
+               *tmp = rotate_left(*tmp);
+               std::cout << "successfully executed" << std::endl;
+            }
+         }
+         printRecursive(root);
+         std::cout << std::endl;
       }
-      // std::cout << std::endl;
    }
 
    bool find(int val) {
@@ -128,13 +155,13 @@ public:
       return false;
    }
 
-   void rotate_right() {
-      root = rotate_right(&root);
-   }
+   // void rotate_right() {
+   //    root->left = rotate_right(root->left);
+   // }
 
-   void rotate_left() {
-      root = rotate_left(&root);
-   }
+   // void rotate_left() {
+   //    root = rotate_left(root);
+   // }
 
    void print() {
       printRecursive(root);
