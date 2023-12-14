@@ -5,20 +5,13 @@
 int main() {
    AVLTree tree;
 
-   tree.insert(10);
-   tree.insert(5);
-   tree.insert(20);
-   tree.insert(3);
-   tree.insert(7);
-   tree.insert(15);
-   tree.insert(27);
-   tree.insert(1);
-   tree.insert(6);
-   tree.insert(11);
-   tree.insert(18);
-   tree.insert(26);
-   tree.insert(30);
-   tree.insert(0);
+   std::vector<int> test_arr_right_heavy = {1, 2, 3, 4, 5, 6, 7};
+   std::vector<int> test_arr_left_heavy = {7, 6, 5, 4, 3, 2, 1};
+   std::vector<int> test_arr_large = {50, 25, 75, 10, 40, 60, 90, 5, 20, 30, 45, 55, 70, 80, 95};
+
+   for (const auto& num: test_arr_large) {
+      tree.insert(num);
+   }
    
    
    if (tree.find(3)) {

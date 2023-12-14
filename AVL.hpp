@@ -125,7 +125,7 @@ public:
             std::cout << "balance == +2" << std::endl;
             int sub_diff = balance((*tmp)->right);
             if (sub_diff == 1) {
-               std::cout << "sub_balance == -1" << std::endl;   
+               std::cout << "sub_balance == +1" << std::endl;   
                *tmp = rotate_left(*tmp);
                std::cout << "successfully executed" << std::endl;
             } else if (sub_diff == -1) {
@@ -154,15 +154,7 @@ public:
 
       return false;
    }
-
-   // void rotate_right() {
-   //    root->left = rotate_right(root->left);
-   // }
-
-   // void rotate_left() {
-   //    root = rotate_left(root);
-   // }
-
+   
    void print() {
       printRecursive(root);
    }
