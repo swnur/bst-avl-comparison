@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <stack>
 
 struct TreeNode {
    TreeNode* left;
@@ -27,26 +28,18 @@ private:
       }
    }
 
-   void delete_tree(TreeNode* root) {
-      if (root == nullptr) {
-        return;
-      }
+   void delete_tree(TreeNode *root) {
+      std::stack<TreeNode *> ptrs;
+      ptrs.push(root);
 
-      std::stack<TreeNode*> s;
-      s.push(root);
-
-      while (!s.empty()) {
-         TreeNode* ptr = s.top();
-         s.pop();
-
-         if (ptr->right != nullptr) {
-            s.push(ptr->right);
+      while (!ptrs.empty()) {
+         TreeNode *ptr = ptrs.top();
+         ptrs.pop();
+         if (ptr) {
+            ptrs.push(ptr->left);
+            ptrs.push(ptr->right);
+            delete ptr;
          }
-         if (ptr->left != nullptr) {
-            s.push(ptr->left);
-         }
-
-         delete ptr;
       }
    }
 public:

@@ -52,7 +52,7 @@ private:
       return banana;
    }
 
-   int balance(Node* ptr) {
+   int get_balance(Node* ptr) {
       return subtree_height(ptr->right) - subtree_height(ptr->left);
    }
 
@@ -66,8 +66,8 @@ private:
          for (int i = 0; i < indent; ++i) {
             std::cout << " ";
          }
-         int diff = balance(ptr);
-         std::cout << "|-->" << ptr->value << "(" << balance(ptr) << ")" << std::endl;
+         int balance = get_balance(ptr);
+         std::cout << "|-->" << ptr->value << "(" << balance << ")" << std::endl;
          printRecursive(ptr->left, indent + 4);
       }
    }
@@ -121,37 +121,25 @@ public:
          Node** tmp = path.top();
          path.pop();
          update_height(tmp);
-         int diff = balance((*tmp));
-         // std:: cout << (*tmp)->value << " ";
-         if (diff == -2) {
-            // std::cout << "balance == -2" << std::endl;
-            int sub_diff = balance((*tmp)->left);
-            if (sub_diff == -1) {
-               // std::cout << "sub_balance == -1" << std::endl;   
+         int balance = get_balance((*tmp));
+
+         if (balance == -2) {
+            int sub_balance = get_balance((*tmp)->left);
+            if (sub_balance == -1) {
                *tmp = rotate_right(*tmp);
-               // std::cout << "successfully executed" << std::endl;
-            } else if (sub_diff == 1) {
-               // std::cout << "sub_balance == +1" << std::endl;
+            } else if (sub_balance == 1) {
                (*tmp)->left = rotate_left((*tmp)->left);
                *tmp = rotate_right(*tmp);
-               // std::cout << "successfully executed" << std::endl;
             }
-         } else if (diff == 2) {
-            // std::cout << "balance == +2" << std::endl;
-            int sub_diff = balance((*tmp)->right);
-            if (sub_diff == 1) {
-               // std::cout << "sub_balance == +1" << std::endl;   
+         } else if (balance == 2) {
+            int sub_balance = get_balance((*tmp)->right);
+            if (sub_balance == 1) {
                *tmp = rotate_left(*tmp);
-               // std::cout << "successfully executed" << std::endl;
-            } else if (sub_diff == -1) {
-               // std::cout << "sub_balance == -1" << std::endl;
+            } else if (sub_balance == -1) {
                (*tmp)->right = rotate_right((*tmp)->right);
                *tmp = rotate_left(*tmp);
-               // std::cout << "successfully executed" << std::endl;
             }
          }
-         // printRecursive(root);
-         // std::cout << std::endl;
       }
    }
 

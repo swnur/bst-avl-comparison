@@ -11,7 +11,7 @@ int main() {
    std::vector<int> test_arr_large = {50, 25, 75, 10, 40, 60, 90, 5, 20, 30, 45, 55, 70, 80, 95};
 
    
-   std::vector<std::string> list_of_words = {"a", "apple", "banana", "potato", "patates", "tomato", "pomidor", "grapefruit"};
+   std::vector<std::string> list_of_words = {"z", "apple", "banana", "potato", "patates", "tomato", "pomidor", "grapefruit", "g"};
    
    for(const auto& word: list_of_words) {
       avl_tree.insert(word);
@@ -24,15 +24,15 @@ int main() {
       std::cout << "apple is not in the tree." << std::endl;
    }
 
-   if (bs_tree.find("asdadsf")) {
+   if (bs_tree.find("apple")) {
       std::cout << "apple is in the tree." << std::endl;
    } else {
       std::cout << "apple is not in the tree." << std::endl;
    }
 
-   std::cout << "BSTRee" << std::endl;
-   bs_tree.print();
-
    std::cout << "AVL Tree" << std::endl;
    avl_tree.print();
+  
+   std::cout << "BS Tree" << std::endl;
+   bs_tree.print();
 }
