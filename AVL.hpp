@@ -24,32 +24,32 @@ private:
       return ptr->height;
    }
 
-   Node* rotate_left(Node* ptr) {
-      Node* tmp = ptr;
-      Node* banana = ptr->right;
-      Node* potates = banana->left;
+   Node* rotate_left(Node* root) {
+      Node* old_root = root;
+      Node* new_root = root->right;
+      Node* left_subtree_of_new_root = new_root->left;
 
-      banana->left = tmp; 
-      tmp->right = potates;
+      new_root->left = old_root;
+      old_root->right = left_subtree_of_new_root;
 
-      update_height(&tmp);
-      update_height(&banana);
+      update_height(&old_root);
+      update_height(&new_root);
 
-      return banana;
+      return new_root;
    }
 
-   Node* rotate_right(Node* ptr) {
-      Node* tmp = ptr;
-      Node* banana = ptr->left;
-      Node* potates = banana->right;
+   Node* rotate_right(Node* root) {
+      Node* old_root = root;
+      Node* new_root = root->left;
+      Node* right_subtree_of_new_root = new_root->right;
 
-      banana->right = tmp; 
-      tmp->left = potates;
+      new_root->right = old_root;
+      old_root->left = right_subtree_of_new_root;
 
-      update_height(&tmp);
-      update_height(&banana);
+      update_height(&old_root);
+      update_height(&new_root);
 
-      return banana;
+      return new_root;
    }
 
    int get_balance(Node* ptr) {
